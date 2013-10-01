@@ -75,7 +75,8 @@ Type ./masked_xcorr -h for a full help menu.
 
 EXAMPLES
 ===============
-In this example we will use masked template matching to find the Batman logo.
+In this example, we will use maximization of masked cross-correlations to locate the Batman logo in a scene.
+The images we will use for this example are shown below, and can be downloaded as an archive <a href="http://qe-design.com/masked_xcorr/images/test_images.zip">here</a>.
 
 fixedImage.jpg (scene):
 
