@@ -44,7 +44,7 @@ Dirk Padfield. "Masked Object Registration in the Fourier Domain". IEEE Transact
 
 The default input image files are fixedImage.jpg and movingImage.jpg. 
 
-The default input masked image files are fixedMask.tif and movingMask.tif. 
+The default input masked image files are fixedMask.png and movingMask.png. 
 
 The output image is xcorr_image.jpg which shows the relative intensity of one channel's masked correlation.
 
@@ -201,9 +201,9 @@ main (int argc, char **argv)
 {
     // default image names 
     const char* fixedImageName = "fixedImage.jpg";
-    const char* fixedMaskName = "fixedMask.tif";
+    const char* fixedMaskName = "fixedMask.png";
     const char* movingImageName = "movingImage.jpg";
-    const char* movingMaskName = "movingMask.tif";
+    const char* movingMaskName = "movingMask.png";
     const char* outputImageName = "xcorr.jpg";
     int topK = 5; 
 
