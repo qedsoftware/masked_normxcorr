@@ -79,19 +79,19 @@ In this example we will use masked template matching to find the Batman logo.
 
 fixedImage.jpg (scene):
 
-    ![Screenshot](http://qe-design.com/masked_xcorr/images/fixedImage.jpg)
+![Screenshot](http://qe-design.com/masked_xcorr/images/fixedImage.jpg)
 
 fixedMask.jpg (scene mask):
 
-    ![Screenshot](http://qe-design.com/masked_xcorr/images/fixedMask.jpg)
+![Screenshot](http://qe-design.com/masked_xcorr/images/fixedMask.jpg)
 
 movingImage.jpg (template):
 
-    ![Screenshot](http://qe-design.com/masked_xcorr/images/movingImage.jpg)
+![Screenshot](http://qe-design.com/masked_xcorr/images/movingImage.jpg)
 
 movingMask.jpg (template mask):
 
-    ![Screenshot](http://qe-design.com/masked_xcorr/images/movingMask.jpg)
+![Screenshot](http://qe-design.com/masked_xcorr/images/movingMask.jpg)
 
 Note that the Batman logo in the template does not exactly match the logo on Batman's chest in the scene.
 
