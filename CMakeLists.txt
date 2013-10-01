@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 2.8)
+project( masked_xcorr ) 
+set (masked_xcorr_VERSION_MAJOR 1)
+set (masked_xcorr_VERSION_MINOR 0)
+find_package( OpenCV REQUIRED ) 
+find_package( Boost COMPONENTS system filesystem REQUIRED ) 
+add_subdirectory( src )
