@@ -1,6 +1,6 @@
 DESCRIPTION
 ===============
-masked_xcorr efficiently computes the cross-correlation between two images, each of 
+masked_normxcorr efficiently computes the cross-correlation between two images, each of 
 which can be independently masked, using fast Fourier techniques. In simple signal
 processing terms, we are computing the cross-correlation of a 2D discrete signal with
 a larger 2D discrete signal, while also allowing the user to specify arbitrarily shaped
@@ -29,7 +29,7 @@ On Mac OS X:
 On Debian systems:
 
     # OpenCV installation: https://help.ubuntu.com/community/OpenCV
-    sudo apt-get install opencv boost-c++ cmake
+    sudo apt-get install libopencv-dev boost-c++ cmake
 
 On Windows systems:
 
@@ -37,16 +37,16 @@ On Windows systems:
 
 Procedure for building code using CMake:
 
-    [masked_xcorr]$ mkdir build
-    [masked_xcorr]$ cd build
-    [masked_xcorr/build]$ cmake ..
-    [masked_xcorr/build]$ make
+    [masked_normxcorr]$ mkdir build
+    [masked_normxcorr]$ cd build
+    [masked_normxcorr/build]$ cmake ..
+    [masked_normxcorr/build]$ make
 
 Note that the last two commands are executed inside the build directory.
 
 Afterwards, the tree structure should look like this:
 
-    [~/masked_xcorr]$ tree -L 2
+    [~/masked_normxcorr]$ tree -L 2
     .
     ├── CMakeLists.txt
     ├── README.md
@@ -59,7 +59,7 @@ Afterwards, the tree structure should look like this:
     └── src
         ├── CMakeLists.txt
         ├── Doxyfile
-        ├── masked_xcorr.cpp
+        ├── masked_normxcorr.cpp
         ├── normxcorr2_masked.cpp
         └── normxcorr2_masked.hpp
 
@@ -67,32 +67,32 @@ Afterwards, the tree structure should look like this:
 
 Now execute the program as follows:
 
-    [masked_xcorr/build/src]$ ./masked_xcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask]
+    [masked_normxcorr/build/src]$ ./masked_normxcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask]
 
-Type ./masked_xcorr -h for a full help menu.
+Type ./masked_normxcorr -h for a full help menu.
 
 
 
 EXAMPLES
 ===============
 In this example, we will use maximization of masked cross-correlations to locate the Batman logo in a scene.
-The images we will use for this example are shown below, and can be downloaded as an archive <a href="http://qe-design.com/masked_xcorr/images/test_images.zip">here</a>.
+The images we will use for this example are shown below, and can be downloaded as an archive <a href="http://qe-design.com/masked_normxcorr/images/test_images.zip">here</a>.
 
 fixedImage.jpg (scene):
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/fixedImage.jpg)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/fixedImage.jpg)
 
 fixedMask.png (scene mask):
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/fixedMask.png)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/fixedMask.png)
 
 movingImage.jpg (template):
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/movingImage.jpg)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/movingImage.jpg)
 
 movingMask.png (template mask):
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/movingMask.png)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/movingMask.png)
 
 Note that the Batman logo in the template does not exactly match the logo on Batman's chest in the scene.
 Also, the Batman logo in the template is red outside of the oval logo, which would throw off a standard cross-correlator that uses rectangular supports.
@@ -100,7 +100,7 @@ The oval template mask allows us to ignore this red area.
 
 Masked normalized cross-correlation using Fourier methods:
 
-    [~/masked_xcorr/build/src]$ ./masked_xcorr -c fixedImage.jpg -d fixedMask.png -e movingImage.jpg -f movingMask.png -o xcorr.jpg -k 3
+    [~/masked_normxcorr/build/src]$ ./masked_normxcorr -c fixedImage.jpg -d fixedMask.png -e movingImage.jpg -f movingMask.png -o xcorr.jpg -k 3
     Fixed image (scene): fixedImage.jpg: [690 x 800]
     Fixed mask (scene mask): fixedMask.png: [690 x 800]
     Moving image (template): movingImage.jpg: [104 x 63]
@@ -158,21 +158,21 @@ The resulting output images are shown below. Note that we ignore all areas where
 
 xcorr_0.jpg (cross-correlation for blue channel):
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/xcorr_0.jpg)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/xcorr_0.jpg)
 
 xcorr_1.jpg (cross-correlation for green channel):
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/xcorr_1.jpg)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/xcorr_1.jpg)
 
 xcorr_2.jpg (cross-correlation for red channel):
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/xcorr_2.jpg)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/xcorr_2.jpg)
 
 Lastly, here is a composite image that averages the cross-correlation images from all three color channels:
 
 xcorr.jpg (average of cross-correlation matrix from all 3 channels) 
 
-![Screenshot](http://qe-design.com/masked_xcorr/images/xcorr.jpg)
+![Screenshot](http://qe-design.com/masked_normxcorr/images/xcorr.jpg)
 
 
 LICENSE 

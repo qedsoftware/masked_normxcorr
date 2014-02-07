@@ -113,7 +113,7 @@ void
 usage (void) {
     printf("Fast Masked Cross-Correlation Using Fourier Domain Methods\n");
     printf("Usage:\n");
-    printf("\tmasked_xcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask] -o [outputImage] -k [topK]\n"); 
+    printf("\tmasked_normxcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask] -o [outputImage] -k [topK]\n"); 
     printf("Options:\n");
     printf("\t-c\tfixedImage: scene that we wish to search for the template\n");
     printf("\t-d\tfixedMask: binary mask specifying the search region in the scene, having the same dimensions as fixedImage\n");
