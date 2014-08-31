@@ -23,7 +23,7 @@ Requirements: opencv, boost, cmake
 
 On Mac OS X:
 
-    # Homebrew instllation: http://brew.sh/
+    # Homebrew installation: http://brew.sh/
     brew install opencv boost cmake
 
 On Debian systems:
