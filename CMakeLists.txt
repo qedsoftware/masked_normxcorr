@@ -5,3 +5,14 @@ set (masked_normxcorr_VERSION_MINOR 0)
 find_package( OpenCV REQUIRED )
 find_package( Boost REQUIRED system filesystem )
 add_subdirectory( src )
+
+enable_testing()
+add_test(
+    NAME Simple
+    COMMAND
+        masked_normxcorr
+        -c "${CMAKE_CURRENT_LIST_DIR}/data/fixedImage.jpg"
+        -d "${CMAKE_CURRENT_LIST_DIR}/data/fixedMask.png"
+        -e "${CMAKE_CURRENT_LIST_DIR}/data/movingImage.jpg"
+        -f "${CMAKE_CURRENT_LIST_DIR}/data/movingMask.png"
+)
