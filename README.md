@@ -43,15 +43,12 @@ On Debian systems:
 
 On Windows systems:
 
-    Download the latest stable version of OpenCV library from [official site][1] and install it.
-    Download and install [boost][2].
+    Download the latest stable version of OpenCV library from official site http://opencv.org/ and install it.
+    Download and install boost from http://www.boost.org/.
     Add CMake option `CMAKE_PREFIX_PATH` or `OpenCV_DIR` to locate OpenCV:
       -DCMAKE_PREFIX_PATH=<...>\opencv\build
     Add CMake options `BOOST_ROOT` to locate Boost:
       -DBOOST_ROOT=<...>
-
-[1]: http://opencv.org/
-[2]: http://www.boost.org/
 
 Procedure for building code using CMake:
 
