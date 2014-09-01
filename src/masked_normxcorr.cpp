@@ -1,7 +1,7 @@
 /***********************************************************************
  * Software License Agreement (BSD License)
  *
- * Copyright 2013 The Math Path Inc. 
+ * Copyright 2013 The Math Path Inc.
  * DBA: Quantitative Engineering Design (http://qe-design.com)
  * Authors: William Wu, Jiehua Chen, Zhang Zhiming
  * Primary Contact: William Wu (william.wu@qe-design.com)
@@ -31,20 +31,20 @@
  *************************************************************************/
 
 /** @mainpage Masked Cross-Correlation in the Fourier Domain
- 
+
 @section purpose Purpose/Overview
 
 This program efficiently computes the cross-correlation between two images,
-each of which can be independently masked, using fast Fourier techniques. Our 
-procedure follows the algorithms described in the following paper: 
+each of which can be independently masked, using fast Fourier techniques. Our
+procedure follows the algorithms described in the following paper:
 
-Dirk Padfield. "Masked Object Registration in the Fourier Domain". IEEE Transactions on Image Processing, vol.21(5), pp. 2706-2718, 2012. 
+Dirk Padfield. "Masked Object Registration in the Fourier Domain". IEEE Transactions on Image Processing, vol.21(5), pp. 2706-2718, 2012.
 
 @section reqs Requirements
 
-The default input image files are fixedImage.jpg and movingImage.jpg. 
+The default input image files are fixedImage.jpg and movingImage.jpg.
 
-The default input masked image files are fixedMask.png and movingMask.png. 
+The default input masked image files are fixedMask.png and movingMask.png.
 
 The output image is xcorr_image.jpg which shows the relative intensity of one channel's masked correlation.
 
@@ -113,7 +113,7 @@ void
 usage (void) {
     printf("Fast Masked Cross-Correlation Using Fourier Domain Methods\n");
     printf("Usage:\n");
-    printf("\tmasked_normxcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask] -o [outputImage] -k [topK]\n"); 
+    printf("\tmasked_normxcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask] -o [outputImage] -k [topK]\n");
     printf("Options:\n");
     printf("\t-c\tfixedImage: scene that we wish to search for the template\n");
     printf("\t-d\tfixedMask: binary mask specifying the search region in the scene, having the same dimensions as fixedImage\n");
@@ -125,14 +125,14 @@ usage (void) {
     printf("\tPixels in movingImage that do not fall under the movingMask are ignored in all correlation computations.\n");
 }
 
-int 
+int
 is_file_openable (const char* filename) {
     ifstream my_file(filename, ios::in);
     return my_file.good();
 }
 
 /*
-Write an image of the cross-correlation matrix. 
+Write an image of the cross-correlation matrix.
 The Mat::convertTo() method is restricted to mappings of the type: x --> a*x + b, where we can specify a and b.
 For maximum dynamic range:
     min --> 0
@@ -143,7 +143,7 @@ Linear equations:
 Solving:
     (1): b  = -a*min
     (2): a(max) - a(min) = 255
-Therefore, 
+Therefore,
     a = 255 / (max - min)
     b = - 255 * min / (max - min)
 Note 1: If we do not wish to achieve maximum dynamic range, and simply want to map -1 --> 0 and +1 --> 255, then a = b = 127.5.
@@ -183,15 +183,15 @@ statistics(cv::Mat CC, int topK) {
     printf("maximum value: %f @ (y,x)=(%d,%d)\n", maxVal, data.front().j, data.front().i);
     printf("minimum value: %f @ (y,x)=(%d,%d)\n", minVal, data.back().j, data.back().i);
 }
-   
- 
+
+
 
 /**
   Main method
 
-  Get image file names and pass them to the member function of Xcorr_opencv. 
+  Get image file names and pass them to the member function of Xcorr_opencv.
   After the relative intensities of masked correlation are calculated,
-  main function shall get the result of one channel and display the result in 
+  main function shall get the result of one channel and display the result in
   one image.
 
   @return The exit status of the program as an integer
@@ -199,13 +199,13 @@ statistics(cv::Mat CC, int topK) {
 int
 main (int argc, char **argv)
 {
-    // default image names 
+    // default image names
     const char* fixedImageName = "fixedImage.jpg";
     const char* fixedMaskName = "fixedMask.png";
     const char* movingImageName = "movingImage.jpg";
     const char* movingMaskName = "movingMask.png";
     const char* outputImageName = "xcorr.jpg";
-    int topK = 5; 
+    int topK = 5;
 
     int c;
     const int arr[] = {0,0,0,0,0,0};
@@ -330,12 +330,12 @@ main (int argc, char **argv)
 
     Xcorr_opencv *p_xcorr = new Xcorr_opencv;
     p_xcorr->Initialization(string(fixedImageName), string(fixedMaskName), string(movingImageName), string(movingMaskName));
-    
+
     double t = (double)getTickCount();
     p_xcorr->CalXcorr();
-    t = (double)getTickCount() - t; 
+    t = (double)getTickCount() - t;
     printf("Total cross-correlation time for all channels: %g ms\n\n", t*1000/getTickFrequency());
-    t = (double)getTickCount(); 
+    t = (double)getTickCount();
 
     vector<cv::Mat> CC_vec;
     vector<cv::Mat> overlap_vec;
@@ -344,7 +344,7 @@ main (int argc, char **argv)
     cv::Mat CC_blend;
 
     // iterate through channels
-    for (int ch=0; ch<3; ch++) { 
+    for (int ch=0; ch<3; ch++) {
         printf("Results for channel %d ...\n",ch);
         p_xcorr->GetResult(CC,overlap,ch);
         CC_vec.push_back(CC);
@@ -357,7 +357,7 @@ main (int argc, char **argv)
         // cv::waitKey();
 
         // find top matches
-        statistics(CC, topK); 
+        statistics(CC, topK);
 
         // write xcorr image to disk
         std::string outputChannelImageBasename;
@@ -373,7 +373,7 @@ main (int argc, char **argv)
         std::string xcorrMatrixChannelName = (outputChannelImageBasename + "_correlation_matrix.tsv");
         std::string overlapMatrixChannelName = (outputChannelImageBasename + "_overlap_matrix.tsv");
         FILE* ccfile = fopen(xcorrMatrixChannelName.c_str(),"w+t"); // overwrite mode
-        FILE* overlapfile = fopen(overlapMatrixChannelName.c_str(),"w+t"); 
+        FILE* overlapfile = fopen(overlapMatrixChannelName.c_str(),"w+t");
         cout << "Writing numerical matrices " << xcorrMatrixChannelName << " and " << overlapMatrixChannelName << " ... " << endl;
         for (int i = 0; i < CC.rows; i++)
         {
@@ -390,11 +390,11 @@ main (int argc, char **argv)
 
         printf("\n");
     }
-    std::string outputBlendedImageName; 
+    std::string outputBlendedImageName;
     if (dirname.length() > 0) {
         outputBlendedImageName = dirname + "/" + basename + extension;
     } else {
-        outputBlendedImageName = basename + extension; 
+        outputBlendedImageName = basename + extension;
     }
     cout << "Writing blended correlation matrix " << outputBlendedImageName << " ..." << endl;
     addWeighted(CC_vec[0],1.0/3,CC_vec[1],1.0/3,0,CC_blend);
