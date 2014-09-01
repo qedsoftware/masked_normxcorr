@@ -36,7 +36,10 @@ On Mac OS X:
 On Debian systems:
 
     # OpenCV installation: https://help.ubuntu.com/community/OpenCV
-    sudo apt-get install libopencv-dev boost-c++ cmake
+    sudo apt-get install libopencv-dev cmake
+    sudo apt-get install libboost-program-options-dev
+    sudo apt-get install libboost-system-dev
+    sudo apt-get install libboost-filesystem-dev
 
 On Windows systems:
 
