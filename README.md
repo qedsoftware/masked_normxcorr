@@ -1,5 +1,11 @@
 DESCRIPTION
 ===============
+
+[![Build Status][branch_github]][repo]
+
+[repo]: https://travis-ci.org/themathpath/masked_normxcorr
+[branch_github]: https://travis-ci.org/themathpath/masked_normxcorr.svg?branch=github
+
 masked_normxcorr efficiently computes the cross-correlation between two images, each of 
 which can be independently masked, using fast Fourier techniques. In simple signal
 processing terms, we are computing the cross-correlation of a 2D discrete signal with
