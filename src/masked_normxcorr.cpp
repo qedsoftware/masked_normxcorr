@@ -98,7 +98,6 @@ The only user interface is that the user will be prompted a image for showing th
 namespace fs = boost::filesystem;
 
 #include "normxcorr2_masked.hpp"
-static int verbose_flag;
 
 using namespace cv;
 
@@ -215,9 +214,6 @@ main (int argc, char **argv)
     {
         static struct option long_options[] =
         {
-            /* These options set a flag. */
-            {"verbose", no_argument, &verbose_flag, 1},
-            {"brief", no_argument, &verbose_flag, 0},
             /* These options don't set a flag.
             *                   We distinguish them by their indices. */
             {"fixedImage", required_argument, 0, 'c'},
@@ -304,12 +300,6 @@ main (int argc, char **argv)
            exit(0);
         }
     }
-
-    /* Instead of reporting ‘--verbose’
-    *           and ‘--brief’ as they are encountered,
-    *                     we report the final status resulting from them. */
-    if (verbose_flag)
-        puts ("Verbose flag is set.");
 
     /* Print any remaining command line arguments (not options). */
     if (optind < argc)
