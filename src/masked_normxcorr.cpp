@@ -87,7 +87,6 @@ The only user interface is that the user will be prompted a image for showing th
 #include <opencv2/highgui/highgui.hpp>
 
 #include <iostream>
-#include <getopt.h>
 #include <vector>
 #include <numeric>
 #include <fstream>
@@ -95,6 +94,8 @@ The only user interface is that the user will be prompted a image for showing th
 
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/program_options.hpp>
+
 namespace fs = boost::filesystem;
 
 #include "normxcorr2_masked.hpp"
@@ -108,25 +109,9 @@ struct Mat_elt {
 };
 bool Mat_elt_cmp(const Mat_elt& x, const Mat_elt& y) { return (x.value > y.value); }
 
-void
-usage (void) {
-    printf("Fast Masked Cross-Correlation Using Fourier Domain Methods\n");
-    printf("Usage:\n");
-    printf("\tmasked_normxcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask] -o [outputImage] -k [topK]\n");
-    printf("Options:\n");
-    printf("\t-c\tfixedImage: scene that we wish to search for the template\n");
-    printf("\t-d\tfixedMask: binary mask specifying the search region in the scene, having the same dimensions as fixedImage\n");
-    printf("\t-e\tmovingImage: template that we 'slide' throughout the scene\n");
-    printf("\t-f\tmovingMask is a binary mask specifying the region of the template not to be ignored, having the same dimensions as movingImage\n");
-    printf("\t-k\tprint locations of the top k highest normalized cross-correlations and their values; defaults to 5\n");
-    printf("Remarks:\n");
-    printf("\tPixels in fixedImage that do not fall under the fixedMask are ignored in all correlation computations.\n");
-    printf("\tPixels in movingImage that do not fall under the movingMask are ignored in all correlation computations.\n");
-}
-
 int
-is_file_openable (const char* filename) {
-    ifstream my_file(filename, ios::in);
+is_file_openable (const std::string& filename) {
+    ifstream my_file(filename.c_str(), ios::in);
     return my_file.good();
 }
 
@@ -198,116 +183,93 @@ statistics(cv::Mat CC, int topK) {
 int
 main (int argc, char **argv)
 {
-    // default image names
-    const char* fixedImageName = "fixedImage.jpg";
-    const char* fixedMaskName = "fixedMask.png";
-    const char* movingImageName = "movingImage.jpg";
-    const char* movingMaskName = "movingMask.png";
-    const char* outputImageName = "xcorr.jpg";
-    int topK = 5;
+    namespace po = boost::program_options;
 
-    int c;
-    const int arr[] = {0,0,0,0,0,0};
-    std::vector<int> input_flags(arr,arr+sizeof(arr)/sizeof(arr[0]));
+    po::options_description desc(
+        "Fast Masked Cross-Correlation Using Fourier Domain Methods\n\n"
+        "Remarks:\n"
+        "    Pixels in fixedImage that do not fall under the fixedMask "
+        "are ignored in all correlation computations.\n"
+        "    Pixels in movingImage that do not fall under the movingMask "
+        "are ignored in all correlation computations.\n"
+    );
 
-    while (1)
-    {
-        static struct option long_options[] =
-        {
-            /* These options don't set a flag.
-            *                   We distinguish them by their indices. */
-            {"fixedImage", required_argument, 0, 'c'},
-            {"fixedMask", required_argument, 0, 'd'},
-            {"movingImage", required_argument, 0, 'e'},
-            {"movingMask", required_argument, 0, 'f'},
-            {"outputImage", required_argument, 0, 'o'},
-            {"topK", required_argument, 0, 'k'},
-            {0,0,0,0}
-        };
-        /* getopt_long stores the option index here. */
-        int option_index = 0;
-        c = getopt_long (argc, argv, "c:d:e:f:o:k:h",
-                         long_options, &option_index);
+    std::string fixedImageName;
+    std::string fixedMaskName;
+    std::string movingImageName;
+    std::string movingMaskName;
+    std::string outputImageName;
+    int topK;
 
-        /* Detect end of options. */
-        if (-1 == c)
-            break;
+    desc.add_options()
+        ("help,h", "show help message")
+        (
+            "fixed-image,c",
+            po::value<std::string>(&fixedImageName)->
+                default_value("fixedImage.jpg"),
+            "scene that we wish to search for the template"
+        )
+        (
+            "fixed-mask,d",
+            po::value<std::string>(&fixedMaskName)->
+                default_value("fixedMask.png"),
+            "binary mask specifying the search region in the scene, "
+            "having the same dimensions as fixedImage"
+        )
+        (
+            "moving-image,e",
+            po::value<std::string>(&movingImageName)->
+                default_value("movingImage.jpg"),
+            "template that we 'slide' throughout the scene"
+        )
+        (
+            "moving-mask,f",
+            po::value<std::string>(&movingMaskName)->
+                default_value("movingMask.png"),
+            "a binary mask specifying the region of the template not "
+            "to be ignored, having the same dimensions as movingImage"
+        )
+        (
+            "output,o",
+            po::value<std::string>(&outputImageName)->
+                default_value("xcorr.jpg"),
+            "output image"
+        )
+        (
+            "top-k,k",
+            po::value<int>(&topK)->default_value(5),
+            "print locations of the top k highest normalized "
+            "cross-correlations and their values"
+        )
+    ;
 
-        switch (c)
-        {
-        case 0:
-            if (long_options[option_index].flag != 0)
-                break;
-            printf ("option %s", long_options[option_index].name);
-            if (optarg)
-                printf (" with arg %s", optarg);
-            printf ("\n");
-            break;
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
 
-        case 'c':
-            input_flags[0] = 1;
-            fixedImageName = optarg;
-            if (!is_file_openable(fixedImageName)) {
-                printf("ERROR: Cannot open file %s.\n", fixedImageName);
-                return 1;
-            }
-            break;
-
-        case 'd':
-            input_flags[1] = 1;
-            fixedMaskName = optarg;
-            if (!is_file_openable(fixedMaskName)) {
-                printf("ERROR: Cannot open file %s.\n", fixedMaskName);
-                return 1;
-            }
-            break;
-
-        case 'e':
-           input_flags[2] = 1;
-           movingImageName = optarg;
-           if (!is_file_openable(movingImageName)) {
-               printf("ERROR: Cannot open file %s.\n", movingImageName);
-               return 1;
-           }
-           break;
-
-        case 'f':
-           input_flags[3] = 1;
-           movingMaskName = optarg;
-           if (!is_file_openable(movingMaskName)) {
-               printf("ERROR: Cannot open file %s.\n", movingMaskName);
-               return 1;
-           }
-           break;
-
-        case 'o':
-           input_flags[4] = 1;
-           outputImageName = optarg;
-           break;
-
-        case 'k':
-           input_flags[5] = 1;
-           topK = atoi(optarg);
-           break;
-
-        case 'h':
-        case '?':
-           usage();
-           exit(0);
-
-        default:
-           usage();
-           exit(0);
-        }
+    if (vm.count("help")) {
+      std::cout << desc << std::endl;
+      return EXIT_SUCCESS;
     }
 
-    /* Print any remaining command line arguments (not options). */
-    if (optind < argc)
-    {
-        printf ("Non-option ARGV-elements: ");
-        while (optind < argc)
-            printf ("%s ", argv[optind++]);
-        putchar ('\n');
+    if (!is_file_openable(fixedImageName)) {
+        std::cerr << "ERROR: Cannot open file " << fixedImageName << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    if (!is_file_openable(fixedMaskName)) {
+        std::cerr << "ERROR: Cannot open file " << fixedMaskName << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    if (!is_file_openable(movingMaskName)) {
+        std::cerr << "ERROR: Cannot open file " << movingMaskName << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    if (!is_file_openable(movingImageName)) {
+        std::cerr << "ERROR: Cannot open file " << movingImageName << std::endl;
+        return EXIT_FAILURE;
     }
 
     fs::path pathname(outputImageName);

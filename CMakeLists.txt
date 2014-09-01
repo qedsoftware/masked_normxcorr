@@ -3,7 +3,7 @@ project( masked_normxcorr )
 set (masked_normxcorr_VERSION_MAJOR 1)
 set (masked_normxcorr_VERSION_MINOR 0)
 find_package( OpenCV REQUIRED )
-find_package( Boost REQUIRED system filesystem )
+find_package( Boost REQUIRED system filesystem program_options )
 add_subdirectory( src )
 
 enable_testing()
