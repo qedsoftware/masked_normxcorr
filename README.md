@@ -1,5 +1,11 @@
 DESCRIPTION
 ===============
+
+[![Build Status][branch_github]][repo]
+
+[repo]: https://travis-ci.org/themathpath/masked_normxcorr
+[branch_github]: https://travis-ci.org/themathpath/masked_normxcorr.svg?branch=github
+
 masked_normxcorr efficiently computes the cross-correlation between two images, each of 
 which can be independently masked, using fast Fourier techniques. In simple signal
 processing terms, we are computing the cross-correlation of a 2D discrete signal with
@@ -23,7 +29,8 @@ Requirements: opencv, boost, cmake
 
 On Mac OS X:
 
-    # Homebrew instllation: http://brew.sh/
+    # Homebrew installation: http://brew.sh/
+    brew tap homebrew/science
     brew install opencv boost cmake
 
 On Debian systems:
@@ -37,12 +44,8 @@ On Windows systems:
 
 Procedure for building code using CMake:
 
-    [masked_normxcorr]$ mkdir build
-    [masked_normxcorr]$ cd build
-    [masked_normxcorr/build]$ cmake ..
-    [masked_normxcorr/build]$ make
-
-Note that the last two commands are executed inside the build directory.
+    [masked_normxcorr]$ cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release
+    [masked_normxcorr]$ cmake --build build --config Release
 
 Afterwards, the tree structure should look like this:
 
@@ -65,18 +68,22 @@ Afterwards, the tree structure should look like this:
 
 (For more information on using CMake, check out http://www.cmake.org/cmake/help/cmake_tutorial.html)
 
-Now execute the program as follows:
-
-    [masked_normxcorr/build/src]$ ./masked_normxcorr -c [fixedImage] -d [fixedMask] -e [movingImage] -f [movingMask]
-
-Type ./masked_normxcorr -h for a full help menu.
-
-
-
 EXAMPLES
 ===============
 In this example, we will use maximization of masked cross-correlations to locate the Batman logo in a scene.
-The images we will use for this example are shown below, and can be downloaded as an archive <a href="http://qe-design.com/masked_normxcorr/images/test_images.zip">here</a>.
+The images we will use for this example are shown below, and can be found in data folder.
+
+Run result executable masked_normxcorr with test images from data folder by ctest:
+
+    [masked_normxcorr]$ cd build
+    [masked_normxcorr/build]$ ctest -VV -C Release
+
+This is equivalent to:
+
+    [masked_normxcorr/build]$ ./masked_normxcorr -c ../data/fixedImage.jpg -d ../data/fixedMask.png -e ../data/movingImage.jpg -f ../data/movingMask.png
+
+Type ./masked_normxcorr -h for a full help menu.
+
 
 fixedImage.jpg (scene):
 
@@ -100,7 +107,6 @@ The oval template mask allows us to ignore this red area.
 
 Masked normalized cross-correlation using Fourier methods:
 
-    [~/masked_normxcorr/build/src]$ ./masked_normxcorr -c fixedImage.jpg -d fixedMask.png -e movingImage.jpg -f movingMask.png -o xcorr.jpg -k 3
     Fixed image (scene): fixedImage.jpg: [690 x 800]
     Fixed mask (scene mask): fixedMask.png: [690 x 800]
     Moving image (template): movingImage.jpg: [104 x 63]
