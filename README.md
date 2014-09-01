@@ -30,6 +30,7 @@ Requirements: opencv, boost, cmake
 On Mac OS X:
 
     # Homebrew installation: http://brew.sh/
+    brew tap homebrew/science
     brew install opencv boost cmake
 
 On Debian systems:
