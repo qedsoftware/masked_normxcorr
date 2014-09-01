@@ -6,6 +6,10 @@ find_package( OpenCV REQUIRED )
 find_package( Boost REQUIRED system filesystem program_options )
 add_subdirectory( src )
 
+set(env_script "${PROJECT_BINARY_DIR}/generated/TestEnv.cmake")
+configure_file("cmake/TestEnv.cmake.in" "${env_script}" @ONLY)
+set_directory_properties(PROPERTIES TEST_INCLUDE_FILE "${env_script}")
+
 enable_testing()
 add_test(
     NAME Simple

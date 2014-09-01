@@ -1,0 +1,5 @@
+if(WIN32)
+  foreach(lib @OpenCV_LIB_DIR@)
+    set(ENV{PATH} "${lib}/../bin;$ENV{PATH}")
+  endforeach()
+endif()
