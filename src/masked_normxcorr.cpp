@@ -206,26 +206,24 @@ main (int argc, char **argv)
         (
             "fixed-image,c",
             po::value<std::string>(&fixedImageName)->
-                default_value("fixedImage.jpg"),
+                required(),
             "scene that we wish to search for the template"
         )
         (
             "fixed-mask,d",
-            po::value<std::string>(&fixedMaskName)->
-                default_value("fixedMask.png"),
+            po::value<std::string>(&fixedMaskName),
             "binary mask specifying the search region in the scene, "
             "having the same dimensions as fixedImage"
         )
         (
             "moving-image,e",
             po::value<std::string>(&movingImageName)->
-                default_value("movingImage.jpg"),
+                required(),
             "template that we 'slide' throughout the scene"
         )
         (
             "moving-mask,f",
-            po::value<std::string>(&movingMaskName)->
-                default_value("movingMask.png"),
+            po::value<std::string>(&movingMaskName),
             "a binary mask specifying the region of the template not "
             "to be ignored, having the same dimensions as movingImage"
         )
@@ -245,11 +243,17 @@ main (int argc, char **argv)
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
 
     if (vm.count("help")) {
-      std::cout << desc << std::endl;
-      return EXIT_SUCCESS;
+        std::cout << desc << std::endl;
+        return EXIT_SUCCESS;
+    }
+
+    try {
+        po::notify(vm);
+    } catch (boost::program_options::required_option& e) {
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        return EXIT_FAILURE;
     }
 
     if (!is_file_openable(fixedImageName)) {

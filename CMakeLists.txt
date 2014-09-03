@@ -3,7 +3,7 @@ project( masked_normxcorr )
 set (masked_normxcorr_VERSION_MAJOR 1)
 set (masked_normxcorr_VERSION_MINOR 0)
 find_package( OpenCV REQUIRED )
-find_package( Boost REQUIRED system filesystem program_options )
+find_package( Boost 1.42 REQUIRED COMPONENTS system filesystem program_options )
 add_subdirectory( src )
 
 set(env_script "${PROJECT_BINARY_DIR}/generated/TestEnv.cmake")
