@@ -211,7 +211,8 @@ main (int argc, char **argv)
         )
         (
             "fixed-mask,d",
-            po::value<std::string>(&fixedMaskName),
+            po::value<std::string>(&fixedMaskName)->
+                required(),
             "binary mask specifying the search region in the scene, "
             "having the same dimensions as fixedImage"
         )
@@ -223,7 +224,8 @@ main (int argc, char **argv)
         )
         (
             "moving-mask,f",
-            po::value<std::string>(&movingMaskName),
+            po::value<std::string>(&movingMaskName)->
+                required(),
             "a binary mask specifying the region of the template not "
             "to be ignored, having the same dimensions as movingImage"
         )
