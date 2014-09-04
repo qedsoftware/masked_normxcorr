@@ -15,8 +15,8 @@ add_test(
     NAME Simple
     COMMAND
         masked_normxcorr
-        -c "${CMAKE_CURRENT_LIST_DIR}/data/fixedImage.jpg"
-        -d "${CMAKE_CURRENT_LIST_DIR}/data/fixedMask.png"
-        -e "${CMAKE_CURRENT_LIST_DIR}/data/movingImage.jpg"
-        -f "${CMAKE_CURRENT_LIST_DIR}/data/movingMask.png"
+        -F "${CMAKE_CURRENT_LIST_DIR}/data/fixedImage.jpg"
+        -f "${CMAKE_CURRENT_LIST_DIR}/data/fixedMask.png"
+        -M "${CMAKE_CURRENT_LIST_DIR}/data/movingImage.jpg"
+        -m "${CMAKE_CURRENT_LIST_DIR}/data/movingMask.png"
 )

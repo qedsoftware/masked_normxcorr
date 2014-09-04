@@ -88,7 +88,7 @@ Run result executable masked_normxcorr with test images from data folder by ctes
 
 This is equivalent to:
 
-    [masked_normxcorr/build]$ ./masked_normxcorr -c ../data/fixedImage.jpg -d ../data/fixedMask.png -e ../data/movingImage.jpg -f ../data/movingMask.png
+    [masked_normxcorr/build]$ ./masked_normxcorr -F ../data/fixedImage.jpg -f ../data/fixedMask.png -M ../data/movingImage.jpg -m ../data/movingMask.png
 
 Type ./masked_normxcorr -h for a full help menu.
 

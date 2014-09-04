@@ -204,26 +204,26 @@ main (int argc, char **argv)
     desc.add_options()
         ("help,h", "show help message")
         (
-            "fixed-image,c",
+            "fixed-image,F",
             po::value<std::string>(&fixedImageName)->
                 required(),
             "scene that we wish to search for the template"
         )
         (
-            "fixed-mask,d",
+            "fixed-mask,f",
             po::value<std::string>(&fixedMaskName)->
                 required(),
             "binary mask specifying the search region in the scene, "
             "having the same dimensions as fixedImage"
         )
         (
-            "moving-image,e",
+            "moving-image,M",
             po::value<std::string>(&movingImageName)->
                 required(),
             "template that we 'slide' throughout the scene"
         )
         (
-            "moving-mask,f",
+            "moving-mask,m",
             po::value<std::string>(&movingMaskName)->
                 required(),
             "a binary mask specifying the region of the template not "
