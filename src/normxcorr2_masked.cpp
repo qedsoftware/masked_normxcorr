@@ -3,7 +3,7 @@
  *
  * Copyright 2013 The Math Path Inc. 
  * DBA: Quantitative Engineering Design (http://qe-design.com)
- * Authors: William Wu, Jiehua Chen, Zhang Zhiming
+ * Authors: William Wu, Jiehua Chen, Zhang Zhiming, Michał Łazowik
  * Primary Contact: William Wu (william.wu@qe-design.com)
  *
  * THE BSD LICENSE
@@ -47,8 +47,15 @@ Xcorr_opencv::~Xcorr_opencv()
 }
 
 //Initializing some member variables before calculation
-int Xcorr_opencv::Initialization(string fixedImageName, string fixedMaskName, string movingImageName, string movingMaskName)
-{
+int Xcorr_opencv::Initialization(
+    string fixedImageName,
+    string fixedMaskName,
+    string movingImageName,
+    string movingMaskName,
+    double requiredFractionOfOverlappingPixels
+){
+    this->requiredFractionOfOverlappingPixels = requiredFractionOfOverlappingPixels;
+
     cv::Mat tmpImage;
 
     //load images
@@ -286,8 +293,12 @@ int Xcorr_opencv::CalculateOneChannelXcorr(int curChannel)
     cv::Mat C = Mat::zeros(numerator.rows,numerator.cols,CV_64FC1);
     double maxAbs = MaxAbsValue(denom);
     double tol = 1000 * eps * maxAbs;
-    double movingMaskSize = MatrixSum(optMovingMask);
-    PostProcessing(C, numerator, denom, tol, -1, 1, numberOfOverlapMaskedPixels, movingMaskSize); 
+
+    double maximumNumberOfOverlappingPixels = 0;
+    minMaxLoc(numberOfOverlapMaskedPixels, NULL, &maximumNumberOfOverlappingPixels);
+    double requiredNumberOfOverlappingPixels = requiredFractionOfOverlappingPixels * maximumNumberOfOverlappingPixels;
+
+    PostProcessing(C, numerator, denom, tol, -1, 1, numberOfOverlapMaskedPixels, requiredNumberOfOverlappingPixels);
 
     // Crop out the correct size.
     C_result[curChannel] = C(Range(0,combinedSize[0]),Range(0,combinedSize[1]));

@@ -3,7 +3,7 @@
  *
  * Copyright 2013 The Math Path Inc.
  * DBA: Quantitative Engineering Design (http://qe-design.com)
- * Authors: William Wu, Jiehua Chen, Zhang Zhiming
+ * Authors: William Wu, Jiehua Chen, Zhang Zhiming, Michał Łazowik
  * Primary Contact: William Wu (william.wu@qe-design.com)
  *
  * THE BSD LICENSE
@@ -92,6 +92,7 @@ The only user interface is that the user will be prompted a image for showing th
 #include <fstream>
 #include <functional>
 
+#include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
@@ -168,7 +169,16 @@ statistics(cv::Mat CC, int topK) {
     printf("minimum value: %f @ (y,x)=(%d,%d)\n", minVal, data.back().j, data.back().i);
 }
 
-
+template <typename T>
+void
+validateRange(T value, T min, T max, const std::string &option_name = "") {
+    if (value < min || value > max) {
+        throw boost::program_options::validation_error(
+            boost::program_options::validation_error::invalid_option_value,
+            option_name
+        );
+    }
+}
 
 /**
   Main method
@@ -199,6 +209,7 @@ main (int argc, char **argv)
     std::string movingImageName;
     std::string movingMaskName;
     std::string outputImageName;
+    double requiredFractionOfOverlappingPixels;
     int topK;
 
     desc.add_options()
@@ -230,6 +241,15 @@ main (int argc, char **argv)
             "to be ignored, having the same dimensions as movingImage"
         )
         (
+            "overlap-fraction,O",
+            po::value<double>(&requiredFractionOfOverlappingPixels)->
+                default_value(0.3)->notifier(
+                    boost::bind(&validateRange<double>, _1, 0.0, 1.0, "\u2012O [ overlap\u2012fraction ]")
+                ),
+            "a fraction of the maximum number of overlapping pixels "
+            "that need to overlap"
+        )
+        (
             "output,o",
             po::value<std::string>(&outputImageName)->
                 default_value("xcorr.jpg"),
@@ -253,7 +273,7 @@ main (int argc, char **argv)
 
     try {
         po::notify(vm);
-    } catch (boost::program_options::required_option& e) {
+    } catch (boost::program_options::error &e) {
         std::cerr << "ERROR: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
@@ -287,7 +307,13 @@ main (int argc, char **argv)
     }
 
     Xcorr_opencv *p_xcorr = new Xcorr_opencv;
-    p_xcorr->Initialization(string(fixedImageName), string(fixedMaskName), string(movingImageName), string(movingMaskName));
+    p_xcorr->Initialization(
+        string(fixedImageName),
+        string(fixedMaskName),
+        string(movingImageName),
+        string(movingMaskName),
+        requiredFractionOfOverlappingPixels
+    );
 
     double t = (double)getTickCount();
     p_xcorr->CalXcorr();

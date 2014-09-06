@@ -3,7 +3,7 @@
  *
  * Copyright 2013 The Math Path Inc. 
  * DBA: Quantitative Engineering Design (http://qe-design.com)
- * Authors: William Wu, Jiehua Chen, Zhang Zhiming
+ * Authors: William Wu, Jiehua Chen, Zhang Zhiming, Michał Łazowik
  * Primary Contact: William Wu (william.wu@qe-design.com)
  *
  * THE BSD LICENSE
@@ -77,6 +77,9 @@ class Xcorr_opencv {
         cv::Mat movingImage;
         /** The image mask for movingImage */
         cv::Mat movingMask;
+
+        double requiredFractionOfOverlappingPixels;
+
         /**
           Channel number of the images for calculating relative intensity
           of masked correlation
@@ -187,21 +190,29 @@ class Xcorr_opencv {
           2.  fixedMask
           3.  movingImage
           4.  movingMask
-          5.  channelnum 
-          6.  combinedSize
-          7.  optimalSize
-          8.  sbgr_fixedImage
-          9.  sbgr_fixedMask
-          10. sbgr_movingImage
-          11. sbgr_movingMask
-          12. All matrices of images with optimized dimension
+          5.  requiredFractionOfOverlappingPixels
+          6.  channelnum
+          7.  combinedSize
+          8.  optimalSize
+          9.  sbgr_fixedImage
+          10.  sbgr_fixedMask
+          11. sbgr_movingImage
+          12. sbgr_movingMask
+          13. All matrices of images with optimized dimension
 
           @param fixedImageName The file name of fixed image
           @param fixedMaskName The file name of fixedMask image
           @param movingImageName The file name of moving image
           @param movingMaskName The file name of movingMask image
+          @param requiredFractionOfOverlappingPixels required fraction of overlapping pixels
          */
-        int Initialization(string fixedImageName, string fixedMaskName, string movingImageName, string movingMaskName);
+        int Initialization(
+            string fixedImageName,
+            string fixedMaskName,
+            string movingImageName,
+            string movingMaskName,
+            double requiredFractionOfOverlappingPixels
+        );
         /**
           Calculate the masked correlations of all channels.
           @pre Initialization must be executed first.
