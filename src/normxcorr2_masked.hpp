@@ -79,6 +79,7 @@ class Xcorr_opencv {
         cv::Mat movingMask;
 
         double requiredFractionOfOverlappingPixels;
+        double requiredNumberOfOverlappingPixels;
 
         /**
           Channel number of the images for calculating relative intensity
@@ -211,7 +212,8 @@ class Xcorr_opencv {
             string fixedMaskName,
             string movingImageName,
             string movingMaskName,
-            double requiredFractionOfOverlappingPixels
+            double requiredFractionOfOverlappingPixels,
+            double requiredNumberOfOverlappingPixels
         );
         /**
           Calculate the masked correlations of all channels.

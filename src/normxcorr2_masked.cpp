@@ -52,9 +52,11 @@ int Xcorr_opencv::Initialization(
     string fixedMaskName,
     string movingImageName,
     string movingMaskName,
-    double requiredFractionOfOverlappingPixels
+    double requiredFractionOfOverlappingPixels,
+    double requiredNumberOfOverlappingPixels
 ){
     this->requiredFractionOfOverlappingPixels = requiredFractionOfOverlappingPixels;
+    this->requiredNumberOfOverlappingPixels = requiredNumberOfOverlappingPixels;
 
     cv::Mat tmpImage;
 
@@ -296,9 +298,12 @@ int Xcorr_opencv::CalculateOneChannelXcorr(int curChannel)
 
     double maximumNumberOfOverlappingPixels = 0;
     minMaxLoc(numberOfOverlapMaskedPixels, NULL, &maximumNumberOfOverlappingPixels);
-    double requiredNumberOfOverlappingPixels = requiredFractionOfOverlappingPixels * maximumNumberOfOverlappingPixels;
+    this->requiredNumberOfOverlappingPixels = max(
+        this->requiredNumberOfOverlappingPixels,
+        requiredFractionOfOverlappingPixels * maximumNumberOfOverlappingPixels
+    );
 
-    PostProcessing(C, numerator, denom, tol, -1, 1, numberOfOverlapMaskedPixels, requiredNumberOfOverlappingPixels);
+    PostProcessing(C, numerator, denom, tol, -1, 1, numberOfOverlapMaskedPixels, this->requiredNumberOfOverlappingPixels);
 
     // Crop out the correct size.
     C_result[curChannel] = C(Range(0,combinedSize[0]),Range(0,combinedSize[1]));

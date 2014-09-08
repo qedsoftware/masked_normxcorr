@@ -202,6 +202,8 @@ main (int argc, char **argv)
         "are ignored in all correlation computations.\n"
         "    Pixels in movingImage that do not fall under the movingMask "
         "are ignored in all correlation computations.\n"
+        "    If both overlap-fraction and overlap-pixels are present a "
+        "greater resulting number is used"
     );
 
     std::string fixedImageName;
@@ -210,6 +212,7 @@ main (int argc, char **argv)
     std::string movingMaskName;
     std::string outputImageName;
     double requiredFractionOfOverlappingPixels;
+    double requiredNumberOfOverlappingPixels;
     int topK;
 
     desc.add_options()
@@ -241,16 +244,21 @@ main (int argc, char **argv)
             "to be ignored, having the same dimensions as movingImage"
         )
         (
-            "overlap-fraction,O",
+            "overlap-fraction,o",
             po::value<double>(&requiredFractionOfOverlappingPixels)->
-                default_value(0.3)->notifier(
+                default_value(0.3, "0.3")->notifier(
                     boost::bind(&validateRange<double>, _1, 0.0, 1.0, "\u2012O [ overlap\u2012fraction ]")
                 ),
-            "a fraction of the maximum number of overlapping pixels "
-            "that need to overlap"
+            "required fraction of maximum possible number of common pixels of masked images"
         )
         (
-            "output,o",
+            "overlap-pixels,p",
+            po::value<double>(&requiredNumberOfOverlappingPixels)->
+                default_value(0),
+            "required number of common pixels of masked images"
+        )
+        (
+            "output,O",
             po::value<std::string>(&outputImageName)->
                 default_value("xcorr.jpg"),
             "output image"
@@ -312,7 +320,8 @@ main (int argc, char **argv)
         string(fixedMaskName),
         string(movingImageName),
         string(movingMaskName),
-        requiredFractionOfOverlappingPixels
+        requiredFractionOfOverlappingPixels,
+        requiredNumberOfOverlappingPixels
     );
 
     double t = (double)getTickCount();
