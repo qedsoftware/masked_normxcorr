@@ -194,10 +194,9 @@ LICENSE
 /***********************************************************************
  * Software License Agreement (BSD License)
  *
- * Copyright 2013 The Math Path Inc. 
- * DBA: Quantitative Engineering Design (http://qe-design.com)
+ * (c) 2013 Quantitative Engineering Design (http://qed.ai)
  * Authors: William Wu, Jiehua Chen, Zhang Zhiming, Michał Łazowik
- * Primary Contact: William Wu (william.wu@qe-design.com)
+ * Primary Contact: William Wu (w@qed.ai)
  *
  * THE BSD LICENSE
  *
@@ -229,4 +228,4 @@ AUTHORS
 ===============
 William Wu, Jiehua Chen, Zhang Zhiming, Michał Łazowik
 
-Primary contact: william.wu@qe-design.com
+Primary contact: w@qed.ai 
