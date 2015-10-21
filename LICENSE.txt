@@ -1,6 +1,6 @@
 /***********************************************************************
 Software License Agreement (BSD License) *
-(c) 20132015 Quantitative Engineering Design (http://qed.ai)
+(c) 2013-2015 Quantitative Engineering Design (http://qed.ai)
 Authors: William Wu, Jiehua Chen, Zhang Zhiming, Michał Łazowik
 Primary Contact: William Wu (w@qed.ai) *
 THE BSD LICENSE *
