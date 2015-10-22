@@ -6,8 +6,8 @@ env:
   - CONFIG=Debug
 
 install:
+  - brew update
   - brew tap homebrew/science
-  - brew install boost
   - brew install opencv
 
 script:
